@@ -1,6 +1,6 @@
 {
 	"name": "@dynamored/dsftp-action",
-	"version": "1.0.0-beta",
+	"version": "1.0.1-beta",
 	"description": "dSFTP Github Actions to easily deploy your files onto your server via SFTP protocol | https://dynamored.com's service",
 	"main": "main.core.ts",
 	"engines": {

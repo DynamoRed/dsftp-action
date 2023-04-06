@@ -1,9 +1,9 @@
 {
 	"compilerOptions": {
-		"target": "ES2015",
-		"moduleResolution": "Node",
+		"target": "ESNext",
+		"moduleResolution": "NodeNext",
 		"rootDir": "./src",
-		"lib": ["ES2015"],
+		"lib": ["ESNext"],
 		"esModuleInterop": true,
 		"forceConsistentCasingInFileNames": true,
 		"strict": true,

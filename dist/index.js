@@ -32346,15 +32346,6 @@ const endAction = (message, error) => {
 
 
 ;// CONCATENATED MODULE: ./src/utils/paths.util.ts
-var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 
 
 
@@ -32369,24 +32360,24 @@ const validatePaths = (runner, paths) => {
     }
     return formattedPaths;
 };
-const uploadPath = (runner, sftp, local, remote) => __awaiter(void 0, void 0, void 0, function* () {
+const uploadPath = async (runner, sftp, local, remote) => {
     const localIsDir = external_fs_.lstatSync(local).isDirectory();
-    if (!(yield sftp.stat(remote)).isDirectory) {
+    if (!(await sftp.stat(remote)).isDirectory) {
         endAction(`[dSFTP] Upload ${runner} failed. Remote folder isn't a valid folder !`, 'Not a folder: ' + remote);
         return `Remote folder isn't a valid folder !`;
     }
-    const remoteDir = yield sftp.realPath(localIsDir ? external_path_.join(remote, external_path_.basename(local)) : remote);
-    if (!(yield sftp.exists(remoteDir))) {
+    const remoteDir = await sftp.realPath(localIsDir ? external_path_.join(remote, external_path_.basename(local)) : remote);
+    if (!(await sftp.exists(remoteDir))) {
         core.notice(`[dSFTP] ${remoteDir} folder does not exist, creating it...`);
-        yield sftp.mkdir(remoteDir, true);
+        await sftp.mkdir(remoteDir, true);
     }
     else if (localIsDir) {
-        yield sftp.rmdir(remoteDir, true);
-        yield sftp.mkdir(remoteDir, true);
+        await sftp.rmdir(remoteDir, true);
+        await sftp.mkdir(remoteDir, true);
     }
     core.info(`[dSFTP] Uploading '${local}' ${localIsDir ? 'content' : ''} to '${remoteDir}'...`);
     return localIsDir ? sftp.uploadDir(local, remoteDir) : sftp.put(external_fs_.createReadStream(local), external_path_.join(remote, external_path_.basename(local)));
-});
+};
 
 
 ;// CONCATENATED MODULE: ./src/utils/params.util.ts
@@ -32401,15 +32392,6 @@ const validateParams = (runner, params) => {
 
 
 ;// CONCATENATED MODULE: ./src/main.core.ts
-var main_core_awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 
 
 
@@ -32443,13 +32425,13 @@ const connectionOpts = {
     privateKey: params.key,
     passphrase: params.keyPassphrase
 };
-client.connect(connectionOpts).then(() => main_core_awaiter(void 0, void 0, void 0, function* () {
+client.connect(connectionOpts).then(async () => {
     core.info('[dSFTP] Connection OK');
     core.notice('[dSFTP] Starting upload...');
-    yield Promise.all(Object.keys(params.paths).map((k) => main_core_awaiter(void 0, void 0, void 0, function* () {
-        yield uploadPath(runner, client, k, params.paths[k]);
-    })));
-})).then(() => {
+    await Promise.all(Object.keys(params.paths).map(async (k) => {
+        await uploadPath(runner, client, k, params.paths[k]);
+    }));
+}).then(() => {
     core.notice('[dSFTP] Ending connection...');
     client.end().then(() => core.info('[dSFTP] Upload ended'));
 }).catch((e) => endAction(`[dSFTP] Upload ${runner} failed. You will find the error juste above.`, e));

@@ -1,4 +1,4 @@
-## 🌟 Beta 1.0.0 !
+## 🌟 Beta 1.0.1 !
 > **Warning**
 > Don't forget to watch and star this repository to be notified on future releases
 

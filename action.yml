@@ -1,0 +1,36 @@
+name: dSFTP
+description: Easily deploy your files onto your server via SFTP protocol
+author: DynamoRed
+runs:
+  using: node16
+  main: dist/index.js
+branding:
+  icon: upload-cloud
+  color: red
+inputs:
+  host:
+    description: The IP adress of your server.
+    required: true
+  user:
+    description: The name of the user you want to use to upload your files/folders.
+    required: true
+  password:
+    description: The password of the user mentionned before.
+    required: true
+
+  paths:
+    description: "Paths are written as objects (key/value) with key = local path and value = parent remote path."
+    required: true
+    default: '{"./hello":"/home/ghaction"}'
+
+  port:
+    description: "The SFTP port of your server."
+    default: "22"
+
+  agent:
+    description: "Path to your server SSH agent."
+    default: ""
+  key:
+    description: "Your SSH private key content."
+  keyPassphrase:
+    description: "If your SSH private key defined just before is encrypted, write the passphrase here."
